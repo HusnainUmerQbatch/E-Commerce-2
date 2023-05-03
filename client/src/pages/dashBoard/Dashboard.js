@@ -1,9 +1,10 @@
 import React from 'react'
+import SideBar from '../../components/sideBar'
 
-function Dashboard() {
+function Dashboard({children}) {
   return (
     <div>
-      DashBoard
+       <SideBar>Dashboard</SideBar>
     </div>
   )
 }

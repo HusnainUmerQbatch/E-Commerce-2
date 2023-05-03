@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import store from "../src/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-// import 'tailwindcss/dist/tailwind.css'
+import './index.css'
 let persistor = persistStore(store);
 function App() {
   return (

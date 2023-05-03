@@ -39,6 +39,7 @@ exports.SignUp = async (req, res) => {
     res.status(201).send({
       successs: true,
       message: "signUp success",
+      user,
       token: generateToken(user.id),
     });
   } catch (error) {

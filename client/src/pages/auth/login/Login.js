@@ -1,69 +1,118 @@
-import React from 'react'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useState } from "react";
+import * as Yup from "yup";
+import Loader from "../../../components/loader/loader";
+import { useNavigate } from "react-router-dom";
+import { serviceErrorHandler } from "../../../config";
+import { Auth } from "../../../services/Auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { login } from "../../../redux/slices/loginSlice";
 const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Username is required'),
-    password: Yup.string().required('Password is required'),
-  });
-  
-  function Login() {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Formik
-          initialValues={{ username: '', password: '' }}
-          validationSchema={validationSchema}
-          onSubmit={(values) => {
-            console.log(values);
-          }}
-        >
-          {(formik) => (
-            <Form className="bg-white p-6 rounded-lg shadow-md">
-              <h1 className="text-4xl font-medium mb-6  bg-black">Login</h1>
-              <div className="mb-4">
-                <label htmlFor="username" className="block font-medium mb-2">
-                  Username
-                </label>
-                <Field
-                  type="text"
-                  id="username"
-                  name="username"
-                  placeholder="Enter your username"
-                  className="w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
-                />
-                <ErrorMessage
-                  name="username"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-              <div className="mb-6">
-                <label htmlFor="password" className="block font-medium mb-2">
-                  Password
-                </label>
-                <Field
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  className="w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
-                disabled={!formik.isValid || formik.isSubmitting}
-              >
-                {formik.isSubmitting ? 'Loading...' : 'Login'}
-              </button>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    );
+  email: Yup.string().email().required("email is required"),
+  password: Yup.string().required("Password is required"),
+});
+
+function Login() {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  async function onSubmit(values) {
+    setLoading(true);
+    Auth.Login(values.email, values.password)
+      .then((res) => {
+        setLoading(false);
+        console.log({ res });
+        dispatch(login(res.data))
+        if(res.data.user.role ==='seller'){
+          navigate('/dashboard');
+        }
+        else{
+          navigate('/shop');
+        }
+      })
+
+      .catch((error) => {
+        setLoading(false);
+        toast.error(serviceErrorHandler(error));
+      });
   }
-export default Login;  
+
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          onSubmit(values);
+        }}
+      >
+        {(formik) => (
+          <Form className="bg-white p-6 rounded-lg shadow-md">
+            <h1 className="text-4xl font-medium mb-6 ">Login</h1>
+            <div className="mb-4">
+              <label htmlFor="email" className="block font-medium mb-2">
+                Email
+              </label>
+              <Field
+                type="text"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                className="w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+            <div className="mb-6">
+              <label htmlFor="password" className="block font-medium mb-2">
+                Password
+              </label>
+              <Field
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                className="w-full border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
+              disabled={!formik.isValid || formik.isSubmitting}
+            >
+              {loading ? (
+                <Loader color={"#4fa94d"} width={"20"} height={"20"} />
+              ) : (
+                "Login"
+              )}
+            </button>
+            <p className="text-xs mt-4">
+              Dont have acoount?{" "}
+              <span
+                className="font-bold cursor-pointer"
+                onClick={() => {
+                  navigate("/signup");
+                }}
+              >
+                SignUp
+              </span>
+            </p>
+          </Form>
+        )}
+      </Formik>
+      <ToastContainer />
+    </div>
+  );
+}
+export default Login;

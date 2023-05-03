@@ -8,7 +8,7 @@ export const loginSlice = createSlice({
   },
   reducers: {
     login(state, action) {
-      state.token = action.payload.jwt;
+      state.token = action.payload.token;
       state.user = action.payload.user;
     },
     SignOut(state, action) {
