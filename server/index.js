@@ -1,19 +1,30 @@
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const cors = require("cors");
+const connectDB = require("./config/db");
 
-require("dotenv").config()
-const express=require("express");
-const app=express();
-
-
-
-
-
-app.get ('/',(req,res)=>{
-    res.send("hello world ")
-})
-const Port=process.env.Port || 9000;
-
-app.listen(Port,()=>{
- console.log(`server running at ${Port}`)   
-})
+const Router = require("./src/routes");
 
 
+
+//Db_connection
+connectDB();
+
+//middlewares
+app.use(express.json());
+app.use(cors());
+
+//routes
+
+app.use("/", Router.auth);
+app.use("/", Router.product);
+
+
+//server
+const Port = process.env.PORT || 5000;
+const server = app.listen(Port, () => {
+  console.log(`server running on ${Port}`);
+});
+
+module.exports = server;
