@@ -1,24 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Router from "../src/router";
+import { Provider } from "react-redux";
+import store from "../src/redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+// import 'tailwindcss/dist/tailwind.css'
+let persistor = persistStore(store);
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Router />
+      </PersistGate>
+    </Provider>
   );
 }
 
