@@ -1,6 +1,6 @@
 const JwtStrategy = require("passport-jwt").Strategy;
 const passport = require("passport");
-const User = require("../models/user.model");
+const User = require("../models/user");
 
 var headerExtractor = function (req) {
   if (
@@ -20,7 +20,6 @@ passport.use(
     },
     async function (jwtPayload, done) {
       const user = await User.findById(jwtPayload.id);
-
       if (user) {
         return done(null, user);
       }

@@ -1,4 +1,4 @@
-const auth = require("./auth.routes");
+const auth = require("./auth");
 const product = require("./product")
 
 const Router = { auth ,product};

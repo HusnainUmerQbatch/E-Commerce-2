@@ -3,10 +3,10 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const connectDB = require("./config/db");
+//importing authentiocation middleware
+const { passport } = require("../server/src/middleware/passport");
 
-const Router = require("./src/routes");
-
-
+const { auth, product } = require("./src/routes");
 
 //Db_connection
 connectDB();
@@ -17,9 +17,8 @@ app.use(cors());
 
 //routes
 
-app.use("/", Router.auth);
-app.use("/", Router.product);
-
+app.use("/", auth);
+app.use("/", passport.authenticate("jwt", { session: false }), product);
 
 //server
 const Port = process.env.PORT || 5000;
