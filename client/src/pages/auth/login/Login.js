@@ -1,45 +1,48 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useState } from "react";
+import { useEffect } from "react";
 import * as Yup from "yup";
 import Loader from "../../../components/loader/loader";
 import { useNavigate } from "react-router-dom";
-import { serviceErrorHandler } from "../../../config";
-import { Auth } from "../../../services/Auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
-import { login } from "../../../redux/slices/loginSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logIn } from "../../../redux/slices/loginSlice";
 const validationSchema = Yup.object().shape({
   email: Yup.string().email().required("email is required"),
   password: Yup.string().required("Password is required"),
 });
 
 function Login() {
-  const [loading, setLoading] = useState(false);
+  const { loading, user, error, success } = useSelector((state) => state.login);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   async function onSubmit(values) {
-    setLoading(true);
-    Auth.Login(values.email, values.password)
-      .then((res) => {
-        setLoading(false);
-        console.log({ res });
-        dispatch(login(res.data))
-        if(res.data.user.role ==='seller'){
-          navigate('/dashboard');
-        }
-        else{
-          navigate('/shop');
-        }
-      })
-
-      .catch((error) => {
-        setLoading(false);
-        toast.error(serviceErrorHandler(error));
-      });
+    const { email, password } = values;
+    dispatch(logIn({ email, password }));
   }
+  // useEffect(() => {
+  //   // console.log({ user, success });
+  //   // if (error) {
+  //   //   console.log("here");
+  //   // }
+  //   console.log(user);
+  //   // // if (error) toast.error(error);
+  //   // // redirect user to login page if registration was successful
+  //   // if (user && user?.role === "seller") navigate("/dashboard");
+  //   // if (user && user?.role === "customer") navigate("/shop");
+  // }, [user, success, error]);
 
+  useEffect(() => {
+    if (error) {
+      if(error.message=="welcome"){
+        toast.success(error.message);
+      }
+      else toast.error(error.message);
+    }
+    if (user && user?.role === "seller") navigate("/dashboard");
+    if (user && user?.role === "customer") navigate("/shop");
+  }, [success,error])
   return (
     <div className="flex justify-center items-center h-screen">
       <Formik
@@ -112,6 +115,8 @@ function Login() {
         )}
       </Formik>
       <ToastContainer />
+      {user ? console.log(user) : ""}
+
     </div>
   );
 }

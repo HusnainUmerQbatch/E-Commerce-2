@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-const {generateToken}= require("../../utlis/generatetoken")
+const { generateToken } = require("../../utlis/generatetoken")
 const signUp = async ({ firstName, lastName, email, password }) => {
   // const JoiSchema = UserSchema.signUp;
   // await JoiSchema.validateAsync({

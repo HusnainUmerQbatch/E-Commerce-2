@@ -15,3 +15,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.page-link{
+  color: tomato;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+.popup-content {
+    width: 30% !important;
+    top: 5.5px !important;
+}

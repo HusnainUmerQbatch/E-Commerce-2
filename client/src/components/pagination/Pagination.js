@@ -12,9 +12,9 @@ function Pagination({ totalPages, handlePageClick }) {
         marginPagesDisplayed={2}
         pageRangeDisplayed={3}
         onPageChange={handlePageClick}
-        containerClassName={"pagination justify-content-center"}
+        containerClassName={"pagination flex justify-center "}
         pageClassName={"page-item"}
-        pageLinkClassName={"page-link"}
+        pageLinkClassName={"page-link"} 
         previousClassName={"page-item"}
         previousLinkClassName={"page-link"}
         nextClassName={"page-item"}

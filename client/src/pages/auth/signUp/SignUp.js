@@ -1,16 +1,15 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect } from "react";
 import Loader from "../../../components/loader/loader";
 import "react-toastify/dist/ReactToastify.css";
-import { serviceErrorHandler } from "../../../config";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Auth } from "../../../services/Auth";
-
+import { signUp } from "../../../redux/slices/loginSlice";
 function SignUp() {
-  const [loading, setLoading] = useState(false);
+  const { loading, user, error, success } = useSelector((state) => state.login);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const initialValues = {
@@ -34,23 +33,19 @@ function SignUp() {
   });
 
   const onSubmit = (values) => {
-    setLoading(true);
-    Auth.SignUp(
-      values.firstName,
-      values.lastName,
-      values.email,
-      values.password
-    )
-      .then((res) => {
-        console.log(res)
-        setLoading(false);
-      })
-
-      .catch((error) => {
-        setLoading(false);
-        toast.error(serviceErrorHandler(error));
-      });
+    const { firstName, lastName, email, password } = values;
+    dispatch(signUp({ firstName, lastName, email, password }));
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message);
+    }
+    // if (error) toast.error(error);
+    // redirect user to login page if registration was successful
+    if (user && user?.role === "seller") navigate("/dashboard");
+    if (user && user?.role === "customer") navigate("/shop");
+  }, [success, error]);
 
   return (
     <div>
@@ -59,6 +54,7 @@ function SignUp() {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
+        {/* {error && <Error>{error}</Error>} */}
         {({ errors, touched }) => (
           <Form className="max-w-md mx-auto mt-8">
             <h2 className="text-xl font-semibold mb-4">Sign Up</h2>
