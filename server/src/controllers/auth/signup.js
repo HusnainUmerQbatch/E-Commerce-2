@@ -1,17 +1,11 @@
 const User = require("../../models/user");
 const { generateToken } = require("../../utlis/generatetoken")
 const signUp = async ({ firstName, lastName, email, password }) => {
-  // const JoiSchema = UserSchema.signUp;
-  // await JoiSchema.validateAsync({
-  //   firstName,
-  //   lastName,
-  //   email,
-  // });
-
   let user;
   user = await User.findOne({ email });
   if (user) {
-    return {
+    throw {
+      status:409,
       message: "User with email already Exist",
     };
   }
@@ -24,7 +18,8 @@ const signUp = async ({ firstName, lastName, email, password }) => {
   });
 
   if (!user) {
-    return {
+    throw {
+      status:400,
       message: "Error while creating new user",
     };
   }

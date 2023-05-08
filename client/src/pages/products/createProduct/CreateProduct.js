@@ -1,7 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
-import { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,23 +10,16 @@ function CreateProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error} = useSelector(
-    (state) => state.product
-  );
+  const { error } = useSelector((state) => state.product);
   const token = useSelector((state) => state.login.token);
   const onSubmit = (values) => {
-    const {name, price, description, asin} = values;
-    console.log({token})
-    dispatch(create_product({ name, price, description, asin, token}));
-
+    const { name, price, description, asin } = values;
+    dispatch(create_product({ name, price, description, asin, token })).then(
+      (res) => {
+        toast(res.payload.message);
+      }
+    );
   };
-  useEffect(() => {
-    if (error) {
-      if(error.message==='asin already exist') toast.error(error.message);
-      else  toast.success(error.message);
-       navigate('/products')
-    }
-  }, [error]);
   return (
     <div className="w-full">
       <SideBar>

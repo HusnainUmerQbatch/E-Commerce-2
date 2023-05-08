@@ -1,56 +1,114 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { add } from "../../redux/slices/cartSlice";
 
 const ProductCard = ({ id, name, description, price }) => {
   const dispatch = useDispatch();
-
+  const [quantity, setQuantity] = useState(1);
   const addToCart = () => {
     let cartItem = {
       id,
       name,
       description,
-      quantity: 1,
+      quantity,
       price,
     };
 
     dispatch(add(cartItem));
     toast.success("added to cart");
+    setQuantity(1)
+  };
+  const increament = () => {
+    setQuantity(quantity + 1);
+  };
+  const decrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
   };
   return (
     <>
-    <div class="bg-white rounded-lg shadow-lg overflow-hidden w-full">
-      <div class="h-64 w-full bg-gray-300">
-        <img
-          class="object-cover h-full w-full"
-          src="https://asset.conrad.com/media10/isa/160267/c1/-/en/002178099PI00/image.jpg?x=400&y=400"
-          alt="Product Image"
-        />
-      </div>
-      <div class="p-4">
-        <h3 class="font-semibold text-lg mb-2">{name}</h3>
-        <p class="text-gray-700 text-base mb-2">{description}</p>
-        <p class="text-gray-700 text-lg font-bold mb-2">$ {price}</p>
-        <button
-          class="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          onClick={() => {
-            addToCart();
-          }}
-        >
-          <svg
-            class="h-6 w-6 fill-current mr-2"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
+      <div class="w-80 bg-white shadow rounded">
+        <div class="h-48 w-full bg-gray-200 flex flex-col justify-between p-4 bg-cover bg-center">
+          <div>
+            <span class="uppercase text-xs bg-green-50 p-0.5 border-green-500 border rounded text-green-700 font-medium select-none">
+              available
+            </span>
+          </div>
+        </div>
+        <div class="p-4 flex flex-col items-center">
+          <p class="text-gray-400 font-light text-xs text-center">
+            Hammond robotics
+          </p>
+          <h1 class="text-gray-800 text-center mt-1">{name}</h1>
+          <p class="text-center text-gray-800 mt-1">${price}</p>
+          <div class="inline-flex items-center mt-2">
+            <button
+              class="bg-white rounded-l border text-gray-600 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 inline-flex items-center px-2 py-1 border-r border-gray-200"
+              onClick={() => decrement()}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 12H4"
+                />
+              </svg>
+            </button>
+            <div class="bg-gray-100 border-t border-b border-gray-100 text-gray-600 hover:bg-gray-100 inline-flex items-center px-4 py-1 select-none">
+              {quantity}
+            </div>
+            <button
+              class="bg-white rounded-r border text-gray-600 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 inline-flex items-center px-2 py-1 border-r border-gray-200"
+              onClick={() => increament()}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </button>
+          </div>
+          <button
+            class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-700 disabled:opacity-50 mt-4 w-full flex items-center justify-center"
+            onClick={() => addToCart()}
           >
-            <path d="M19 16h-3v3h-2v-3H8v-2h6V8h2v6h3z" />
-            <path d="M0 0h24v24H0z" fill="none" />
-          </svg>
-          Add to cart
-        </button>
+            Add to cart
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 ml-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
-    </div>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

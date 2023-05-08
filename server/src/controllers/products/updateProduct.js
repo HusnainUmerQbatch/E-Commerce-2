@@ -6,7 +6,7 @@ const updateProduct = async ({ id, name, description, price, asin }) => {
     { new: true }
   );
 
-  return { message: "successfully updated" };
+  return { message: "updated successfully" };
 };
 
 module.exports = updateProduct;

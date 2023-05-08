@@ -60,6 +60,7 @@ router.put("/products/:id", async (req, res) => {
     });
     res.json(result);
   } catch (error) {
+    console.log(error)
     const { status } = error;
     s = status ? status : 500;
     return res.status(s).send({

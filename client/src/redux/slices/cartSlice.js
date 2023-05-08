@@ -70,7 +70,6 @@ export const cartSlice = createSlice({
       state.cartTotalAmount = total;
     },
     clearCart(state, action) {
-      console.log("hereClear Cart");
       state.cartItems = [];
     },
   },

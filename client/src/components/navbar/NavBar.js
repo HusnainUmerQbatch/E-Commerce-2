@@ -15,34 +15,21 @@ function Navbar() {
       <div className="flex">
         <div className="flex items-center   relative mr-4">
           <Link to="/cart" className="relative">
-            <svg
+          <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              class="h-6 w-6 ml-2"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 4h16l-1.58 7.9A2 2 0 0 1 16.42 14H7.58a2 2 0 0 1-1.99-2.1L4 4z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 18h4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
             <span className="absolute -top-1 -right-[1.75rem] bg-red-500 mt-1 text-white rounded-full px-1">
-              {console.log(cartItems.length)}
               {cartItems.length}
             </span>
           </Link>

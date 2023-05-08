@@ -1,7 +1,6 @@
-import React from "react";
 import ReactPaginate from "react-paginate";
 
-function Pagination({ totalPages, handlePageClick }) {
+function Pagination({ totalPages, handlePageClick, currentPage }) {
   return (
     <div>
       <ReactPaginate
@@ -14,7 +13,7 @@ function Pagination({ totalPages, handlePageClick }) {
         onPageChange={handlePageClick}
         containerClassName={"pagination flex justify-center "}
         pageClassName={"page-item"}
-        pageLinkClassName={"page-link"} 
+        pageLinkClassName={"page-link"}
         previousClassName={"page-item"}
         previousLinkClassName={"page-link"}
         nextClassName={"page-item"}
@@ -22,6 +21,7 @@ function Pagination({ totalPages, handlePageClick }) {
         breakClassName={"page-item"}
         breakLinkClassName={"page-link"}
         activeClassName={"active"}
+        forcePage={currentPage}
       />
     </div>
   );

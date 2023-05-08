@@ -7,6 +7,7 @@ import Products from "../pages/products";
 import CreateProduct from "../pages/products/createProduct/CreateProduct";
 import UpdateProduct from "../pages/products/updateProduct";
 import Cart from "../pages/cart/Cart";
+import NotFound from "../pages/notFound/NotFound";
 function Router() {
   return (
     <BrowserRouter>
@@ -21,7 +22,7 @@ function Router() {
         </Route>
         <Route exact path="/" element={<Login />} />
         <Route exact path="/signup" element={<SignUp />} />
-       
+        <Route exact path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

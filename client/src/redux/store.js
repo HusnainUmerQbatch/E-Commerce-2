@@ -33,6 +33,7 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 
 export default configureStore({
   reducer: persistedReducer,
-  middleware: [thunk, logger],
+  //middleware: [thunk, logger],
+  middleware: [thunk],
   devTools: true
 });

@@ -17,6 +17,7 @@ const productSchema = mongoose.Schema(
     asin: {
       type: String,
       required: true,
+      unique:true
     },
   },
   {

@@ -2,9 +2,9 @@ const Product = require("../../models/product");
 const getProductById = async ({ id }) => {
   const product = await Product.findById(id);
   if (!product) {
-    return {
+    throw {
+      status:400,
       message: "product does not exist",
-      success: false,
     };
   }
   return {
