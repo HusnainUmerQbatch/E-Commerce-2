@@ -4,10 +4,9 @@ const Url = process.env.REACT_APP_URL;
 
 export const fetch_products = createAsyncThunk(
   `fetch_products`,
-  async ({ token }, { rejectWithValue }) => {
+  async ({ token,page,limit }, { rejectWithValue }) => {
     try {
-      console.log("coming here ");
-      const response = await axios.get(`${Url}/products`, {
+      const response = await axios.get(`${Url}/products?page=${page}&&limit=${limit}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -26,10 +25,12 @@ export const fetch_products = createAsyncThunk(
 );
 export const update_product = createAsyncThunk(
   `update_products`,
-  async ({ name, price, description, asin, token,id }, { rejectWithValue }) => {
+  async (
+    { name, price, description, asin, token, id },
+    { rejectWithValue }
+  ) => {
     try {
-
-      console.log({name, price, description, asin, token,id })
+      console.log({ name, price, description, asin, token, id });
       const response = await axios.put(
         `${Url}/products/${id}`,
         { name, price, description, asin },
@@ -50,10 +51,36 @@ export const update_product = createAsyncThunk(
     }
   }
 );
+
+export const create_product = createAsyncThunk(
+  `create_product`,
+  async ({ name, price, description, asin, token }, { rejectWithValue }) => {
+    try {
+      console.log({ name, price, description, asin, token });
+      const response = await axios.post(
+        `${Url}/products`,
+        { name, price, description, asin },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      // return custom error message from backend if present
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
 export const delete_product = createAsyncThunk(
   `delete_product`,
   async ({ data, token }, { rejectWithValue }) => {
-    // console.log({token})
     try {
       const response = await axios.delete(`${Url}/products/${data._id}`, {
         headers: {
@@ -77,8 +104,10 @@ export const productSlice = createSlice({
   initialState: {
     loading: false,
     products: [],
+    pages:null,
     error: null,
     success: false,
+    rows:null
   },
 
   reducers: {},
@@ -91,6 +120,8 @@ export const productSlice = createSlice({
     [fetch_products.fulfilled]: (state, { payload }) => ({
       loading: false,
       products: payload.products,
+      pages:payload.totalPages,
+      rows:payload.totalRows,
       success: true,
     }),
     [fetch_products.rejected]: (state, { payload }) => ({
@@ -103,38 +134,47 @@ export const productSlice = createSlice({
       ...state,
       loading: true,
     }),
-    [delete_product.fulfilled]: (state, { payload }) => {
-      console.log({ payload });
-      state.loading = false;
-      const { _id } = payload.product;
-      console.log({ _id });
-      if (_id) {
-        state.products = state.products.filter((ele) => ele._id !== _id);
-      }
-      state.success = true;
-      console.log(state.products);
-    },
-    [delete_product.rejected]: (state, { payload }) => {
-      console.log({ payload });
-      state.loading = false;
-      state.error = payload;
-      state.success = false;
-    },
+    [delete_product.fulfilled]: (state, { payload }) => ({
+      loading : false,
+      success : false,
+    }),
+    [delete_product.rejected]: (state, { payload }) => ({
+      loading : false,
+      error : payload,
+      success : false,
+    }),
     [update_product.pending]: (state) => ({
       ...state,
       loading: true,
     }),
-    [update_product.fulfilled]: (state, { payload }) => {
+    [update_product.fulfilled]: (state, { payload }) => ({
+      loading: false,
+      error:payload,
+      success: true,
+    }),
+
+    [update_product.rejected]: (state, { payload }) => ({
+      loading: false,
+      error: payload,
+      success: false,
+    }),
+
+    [create_product.pending]: (state) => ({
+      ...state,
+      loading: true,
+    }),
+    [create_product.fulfilled]: (state, { payload }) => {
       console.log({ payload });
       state.loading = false;
+      state.error= payload; 
       state.success = true;
     },
-    [update_product.rejected]: (state, { payload }) => {
-      console.log({ payload });
-      state.loading = false;
-      state.error = payload;
-      state.success = false;
-    },
+
+    [create_product.rejected]: (state, { payload }) => ({
+      loading: false,
+      error: payload,
+      success: false,
+    }),
   },
 });
 

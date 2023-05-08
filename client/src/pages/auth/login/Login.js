@@ -21,17 +21,7 @@ function Login() {
     const { email, password } = values;
     dispatch(logIn({ email, password }));
   }
-  // useEffect(() => {
-  //   // console.log({ user, success });
-  //   // if (error) {
-  //   //   console.log("here");
-  //   // }
-  //   console.log(user);
-  //   // // if (error) toast.error(error);
-  //   // // redirect user to login page if registration was successful
-  //   // if (user && user?.role === "seller") navigate("/dashboard");
-  //   // if (user && user?.role === "customer") navigate("/shop");
-  // }, [user, success, error]);
+
 
   useEffect(() => {
     if (error) {
@@ -40,7 +30,7 @@ function Login() {
       }
       else toast.error(error.message);
     }
-    if (user && user?.role === "seller") navigate("/dashboard");
+    if (user && user?.role === "seller") navigate("/products");
     if (user && user?.role === "customer") navigate("/shop");
   }, [success,error])
   return (
@@ -115,8 +105,6 @@ function Login() {
         )}
       </Formik>
       <ToastContainer />
-      {user ? console.log(user) : ""}
-
     </div>
   );
 }

@@ -1,14 +1,13 @@
 import DataTable from "react-data-table-component";
-
 import { ToastContainer, toast } from "react-toastify";
-import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { delete_product } from "../../redux/slices/productSlice";
-import UpdateProductModal from "../updateProductModal/UpdateProductModal";
+import { useNavigate } from "react-router-dom";
 
 const ProductTable = ({ data }) => {
   const dispatch = useDispatch();
+  const navigate=useNavigate();
   const token = useSelector((state) => state.login.token);
 
   const columns = [
@@ -37,9 +36,8 @@ const ProductTable = ({ data }) => {
       cell: (data) => {
         return (
           <div className="w-[100%]">
-            <Popup
-              trigger={
-                <div className="w-5 h-7 cursor-pointer ">
+       
+                <div className="w-5 h-7 cursor-pointer " onClick={()=>navigate(`/products/${data._id}`)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -55,40 +53,11 @@ const ProductTable = ({ data }) => {
                     <circle cx="5" cy="12" r="1"></circle>
                   </svg>
                 </div>
-              }
-              position="right center"
-            >
-              <UpdateProductModal id={data._id} title={"update product"} />
-            </Popup>
+              
           </div>
         );
       },
     },
-    // {
-    //   cell: (data) => {
-    //     return (
-    //       <div className="w-[100%]">
-    //         <Popup
-    //           trigger={
-    //             <div className="w-5 h-7 cursor-pointer ">
-    //               <svg
-    //                 xmlns="http://www.w3.org/2000/svg"
-    //                 viewBox="0 0 24 24"
-    //                 width="24"
-    //                 height="24"
-    //               >
-    //                 <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm5 11h-4v4c0 .6-.4 1-1 1s-1-.4-1-1v-4H7c-.6 0-1-.4-1-1s.4-1 1-1h4V7c0-.6.4-1 1-1s1 .4 1 1v4h4c.6 0 1 .4 1 1s-.4 1-1 1z" />
-    //               </svg>
-    //             </div>
-    //           }
-    //           position="right center"
-    //         >
-    //           <UpdateProductModal  title={"create product"} />
-    //         </Popup>
-    //       </div>
-    //     );
-    //   },
-    // },
     {
       cell: (data) => {
         // if (data) {
@@ -122,10 +91,8 @@ const ProductTable = ({ data }) => {
     
     
           <div className="ml-10 flex p-4">
-            <p className="text-base font-semibold ">Add New</p>
-            <Popup
-              trigger={
-                <div className="w-5 h-7 cursor-pointer ">
+            <p className="text-base font-semibold mr-3 ">Add New</p>
+                <div className="w-5 h-7 cursor-pointer " onClick={()=> navigate("/products/new")}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -135,11 +102,6 @@ const ProductTable = ({ data }) => {
                     <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm5 11h-4v4c0 .6-.4 1-1 1s-1-.4-1-1v-4H7c-.6 0-1-.4-1-1s.4-1 1-1h4V7c0-.6.4-1 1-1s1 .4 1 1v4h4c.6 0 1 .4 1 1s-.4 1-1 1z" />
                   </svg>
                 </div>
-              }
-              position="right center"
-            >
-              <UpdateProductModal  title={"create product"} />
-            </Popup>
           </div>
      
       <DataTable columns={columns} data={data ?? []} className="table" />

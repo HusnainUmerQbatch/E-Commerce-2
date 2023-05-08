@@ -2,14 +2,16 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
-import Loader from "../loader/loader";
+import Loader from "../../../components/loader/loader";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { update_product } from "../../redux/slices/productSlice";
-function UpdateProductModal({ id, title,}) {
+import { useNavigate,useParams } from "react-router-dom";
+import { update_product } from "../../../redux/slices/productSlice";
+import SideBar from "../../../components/sideBar";
+function UpdateProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
   const [product, setProduct] = useState();
 
   const { products, loading, error, success } = useSelector(
@@ -17,36 +19,29 @@ function UpdateProductModal({ id, title,}) {
   );
   const token = useSelector((state) => state.login.token);
   useEffect(() => {
+    if(error){
+      toast.error(error.message)
+    }
     if (id) {
       const singleUser = products.filter((ele) => ele._id === id);
       setProduct(singleUser[0]);
     }
   }, []);
-  const initialValues = {
-    name: product?.name,
-    price: product?.price,
-    description: product?.description,
-    asin: product?.asin,
-  };
-  const validationSchema = Yup.object({
-    name: Yup.string().required("Required"),
-    lastName: Yup.string().required("Required"),
-    price: Yup.number().required("Required"),
-    description: Yup.string().required("Required"),
-    asin: Yup.string().required("Required"),
-  });
+
   const onSubmit = (values) => {
     const { name, price, description, asin } = values;
-    dispatch(update_product({ name, price, description, asin, token, id }));
+      dispatch(update_product({ name, price, description, asin, token, id }));
+      navigate("/products")
   };
   useEffect(() => {
     if (error) {
       toast.error(error.message);
     }
-  }, [success, error]);
+  }, [ error]);
   return (
+    <div className="w-full"> 
+    <SideBar>
     <div className="m-10 ">
-      {console.log(product)}
       <Formik
         initialValues={{
           name: product?.name,
@@ -58,13 +53,13 @@ function UpdateProductModal({ id, title,}) {
           name: Yup.string().required("Required"),
           description: Yup.string().required("Required"),
           price: Yup.number().required("Required"),
-          asin: Yup.string(),
+          asin: Yup.string().required("Required"),
         })}
         onSubmit={onSubmit}
         enableReinitialize={true}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className="w-full">
             <div className="mb-4">
               <label htmlFor="name" className="block font-bold mb-2">
                 Product Name
@@ -118,7 +113,7 @@ function UpdateProductModal({ id, title,}) {
             </div>
             <div className="mb-4">
               <label htmlFor="asin" className="block font-bold mb-2">
-                ASIN (optional)
+                ASIN 
               </label>
               <Field
                 type="text"
@@ -133,13 +128,15 @@ function UpdateProductModal({ id, title,}) {
               disabled={isSubmitting}
               className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
             >
-              {title}
+              update
             </button>
           </Form>
         )}
       </Formik>
       <ToastContainer />
     </div>
+    </SideBar>
+    </div>
   );
 }
-export default UpdateProductModal;
+export default UpdateProduct;

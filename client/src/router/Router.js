@@ -1,21 +1,27 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "../pages/auth/login/Login";
-import PrivateRoutes from "../components/protectedRoute/Privateroute";
-import Dashboard from "../pages/dashBoard";
+import PrivateRoute from "../components/protectedRoute/Privateroute";
 import Shop from "../pages/shop/Shop";
 import SignUp from "../pages/auth/signUp";
 import Products from "../pages/products";
+import CreateProduct from "../pages/products/createProduct/CreateProduct";
+import UpdateProduct from "../pages/products/updateProduct";
+import Cart from "../pages/cart/Cart";
 function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<PrivateRoutes />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
-        <Route path="/" element={<Login />} />
-        <Route exact path="/signup" element={<SignUp />} />
-        <Route exact path="/shop" element={<Shop />} />
+      
+      <Route element={<PrivateRoute />}>
+      <Route exact path="/shop" element={<Shop />} />
         <Route exact path="/products" element={<Products />} />
+        <Route exact path="/products/new" element={<CreateProduct />} />
+        <Route exact path="/products/:id" element={<UpdateProduct />} />
+        <Route exact path="/cart" element={<Cart />} />
+        </Route>
+        <Route exact path="/" element={<Login />} />
+        <Route exact path="/signup" element={<SignUp />} />
+       
       </Routes>
     </BrowserRouter>
   );

@@ -43,7 +43,7 @@ function SignUp() {
     }
     // if (error) toast.error(error);
     // redirect user to login page if registration was successful
-    if (user && user?.role === "seller") navigate("/dashboard");
+    if (user && user?.role === "seller") navigate("/products");
     if (user && user?.role === "customer") navigate("/shop");
   }, [success, error]);
 

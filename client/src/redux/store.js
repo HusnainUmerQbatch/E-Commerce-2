@@ -1,38 +1,38 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import cartReducer from "../redux/slices/cartSlice"
-import loginReducer from "../redux/slices/loginSlice";
+import loginReducer, { loginSlice } from "../redux/slices/loginSlice";
 import productReducer from "./slices/productSlice";
+import cartReducer from "./slices/cartSlice"
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
 
 import {
   persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
+  whitelist: ['login']
 };
 
-// const reducers = combineReducers({
-//   auth: loginReducer,
+const reducers = combineReducers({
+  login: loginReducer,
+  product: productReducer,
+  cart: cartReducer 
+})
 
-// })
-const persistedReducer = persistReducer(persistConfig, cartReducer);
-const persistedReducerlogin = persistReducer(persistConfig, loginReducer);
-const persistedReducerProduct = persistReducer(persistConfig, productReducer);
+const reducer = (state, action) => {
+  if(action.type ==  'login/SignOut') {
+    state = undefined;
+  }
+  return reducers(state, action);
+}
+
+const persistedReducer = persistReducer(persistConfig, reducer);
 
 export default configureStore({
-  reducer: { auth: persistedReducer, login: persistedReducerlogin, product:persistedReducerProduct },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+  reducer: persistedReducer,
+  middleware: [thunk, logger],
+  devTools: true
 });
