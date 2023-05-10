@@ -5,26 +5,65 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../components/navbar";
 import { fetch_products } from "../../redux/slices/productSlice";
 import loadinArrow from "../../assets/loadinArrow.svg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Shop = () => {
   const dispatch = useDispatch();
-  const {  success,  } = useSelector((state) => state.product);
-  const [hideMoreProducts, setHideMoreProducts] = useState(true);
+  const { success } = useSelector((state) => state.product);
+  // const [hideMoreProducts, setHideMoreProducts] = useState(true);
   const [myProducts, setMyProducts] = useState([]);
-
+  const [addToCartToggle, setAddToCartToggle] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [productsLimit, setProductsLimit] = useState(false);
   const { token } = useSelector((state) => state.login);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   useEffect(() => {
+    function handleScroll() {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+
+      if (scrollTop + clientHeight === scrollHeight) {
+        // The end of scroll has been reached, do something here
+        if (productsLimit) {
+          setPage(page + 1);
+        }
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
+  useEffect(() => {
     if (token) {
       dispatch(fetch_products({ token, page, limit })).then((res) => {
-        console.log("length=", res.payload.products.length);
         setMyProducts([...myProducts, ...res.payload.products]);
-        if (res.payload.products.length < 10) {
-          setHideMoreProducts(false);
+        if (!res.payload.products.length ) {
+          setProductsLimit(false);
+        } else {
+          setProductsLimit(true);
         }
       });
     }
   }, [success, page]);
+
+  useEffect(() => {
+    if (addToCartToggle) {
+      setShowToast(true);
+    }
+  }, [addToCartToggle]);
+
+  useEffect(() => {
+    if (showToast) {
+      toast("Product added to cart");
+      setAddToCartToggle(false);
+      setShowToast(false);
+    }
+  }, [showToast]);
+
   return (
     <div>
       <Navbar />
@@ -37,25 +76,14 @@ const Shop = () => {
                 id={item._id}
                 description={item.description}
                 price={item.price}
+                addToCartToggle={addToCartToggle}
+                setAddToCartToggle={setAddToCartToggle}
               />
             </div>
           );
         })}
       </div>
-      {hideMoreProducts && (
-        <div
-          className="flex justify-center cursor-pointer rounded-md mb-10 items-center bg-slate-300 h-10 mx-auto w-2/12"
-          onClick={() => {
-            // setLimit(limit + 10);
-            setPage(page + 1);
-          }}
-        >
-          <div className="h-5 w-5 mr-3">
-            <img src={loadinArrow} />
-          </div>
-          More Products
-        </div>
-      )}
+      <ToastContainer />
     </div>
   );
 };

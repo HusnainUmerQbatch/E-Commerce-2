@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { delete_product } from "../../redux/slices/productSlice";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import cross from "../../assets/cross.svg";
 import "react-toastify/dist/ReactToastify.css";
-const ProductTable = ({ data, setPage }) => {
+const ProductTable = ({ data, setPage,setSearchTerm,searchTerm }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.login.token);
@@ -57,6 +58,7 @@ const ProductTable = ({ data, setPage }) => {
           </div>
         );
       },
+      width: "10%",
     },
     {
       cell: (data) => {
@@ -80,29 +82,52 @@ const ProductTable = ({ data, setPage }) => {
           </div>
         );
       },
+      width: "10%",
     },
   ];
+  // function handleKeyDown(event) {
+  //   if (event.key === "Enter") {
+  //     console.log(event.target.value)
+  //   }
+  // }
   return (
     <>
-      <div className="ml-10 flex p-4">
-        <p className="text-base font-semibold mr-3 ">Add New</p>
-        <div
-          className="w-5 h-7 cursor-pointer "
-          onClick={() => navigate("/products/new")}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
+      <div className="ml-10 flex justify-between p-4">
+        <div className="flex ">
+          <p className="text-base font-semibold mr-3 ">Add New</p>
+          <div
+            className="w-5 h-7 cursor-pointer "
+            onClick={() => navigate("/products/new")}
           >
-            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm5 11h-4v4c0 .6-.4 1-1 1s-1-.4-1-1v-4H7c-.6 0-1-.4-1-1s.4-1 1-1h4V7c0-.6.4-1 1-1s1 .4 1 1v4h4c.6 0 1 .4 1 1s-.4 1-1 1z" />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+            >
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm5 11h-4v4c0 .6-.4 1-1 1s-1-.4-1-1v-4H7c-.6 0-1-.4-1-1s.4-1 1-1h4V7c0-.6.4-1 1-1s1 .4 1 1v4h4c.6 0 1 .4 1 1s-.4 1-1 1z" />
+            </svg>
+          </div>
         </div>
+        {/* <input
+          type="text"
+          className="border p-1 rounded-md relative"
+          placeholder="search"
+          onChange={(e)=>setSearchTerm(e.target.value)}
+          value={searchTerm}
+          // onKeyDown={handleKeyDown}
+        />
+        <img
+          src={cross}
+          className="h-3 w-3 absolute top-[14.5%] cursor-pointer right-[3%]"
+          onClick={()=>{
+            console.log("click")
+            setSearchTerm("")
+          }}
+        /> */}
       </div>
 
       <DataTable columns={columns} data={data ?? []} className="table" />
-      {/* <ToastContainer /> */}
     </>
   );
 };

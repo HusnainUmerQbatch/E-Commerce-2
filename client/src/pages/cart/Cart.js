@@ -3,15 +3,33 @@ import React, { useEffect } from "react";
 import Navbar from "../../components/navbar";
 import { useSelector, useDispatch } from "react-redux";
 import CartItem from "../../components/cartItem/CartItem";
-import { getTotals } from "../../redux/slices/cartSlice";
+import { setTotals } from "../../redux/slices/cartSlice";
 
 function Cart() {
   const dispatch = useDispatch();
   const { cartItems, cartTotalAmount } = useSelector((state) => state.cart);
 
   useEffect(() => {
-    dispatch(getTotals());
+    cartTotal();
   }, [cartItems]);
+
+const cartTotal=()=>{
+
+    let { total } = cartItems.reduce(
+      (cartTotal, cartItem) => {
+        const { price, quantity } = cartItem;
+        const itemTotal = price * quantity;
+        cartTotal.total += itemTotal;
+        return cartTotal;
+      },
+      {
+        total: 0,
+      }
+    );
+    total = parseFloat(total.toFixed(2));
+    dispatch(setTotals(total));
+}
+
   return (
     <div>
       <Navbar />

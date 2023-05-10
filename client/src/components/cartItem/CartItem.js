@@ -1,19 +1,42 @@
+import { setCartItems } from "../../redux/slices/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-import {decreaseCart,increaseCart} from "../../redux/slices/cartSlice"
-import { useDispatch,useSelector } from "react-redux";
-
-function CartItem({item}) {
-    const dispatch=useDispatch();
-
+function CartItem({ item }) {
+  const dispatch = useDispatch();
+  const { cartItems } = useSelector((state) => state.cart);
 
   function incrementQuantity() {
-    dispatch(increaseCart(item));
+    let updatedCarItems = [...cartItems];
+    const existingIndex = updatedCarItems.findIndex((el) => el.id === item.id);
+
+    if (existingIndex >= 0) {
+      updatedCarItems[existingIndex] = {
+        ...updatedCarItems[existingIndex],
+        quantity: updatedCarItems[existingIndex].quantity + 1,
+      };
+    } else {
+      let newProduct = item;
+      updatedCarItems.push(newProduct);
+    }
+
+    dispatch(setCartItems(updatedCarItems));
   }
 
   function decrementQuantity() {
+    let updatedCarItems = [...cartItems];
+    const itemIndex = updatedCarItems.findIndex((ele) => ele.id === item.id);
+    if (updatedCarItems[itemIndex].quantity > 1) {
+      updatedCarItems[itemIndex] = {
+        ...updatedCarItems[itemIndex],
+        quantity: updatedCarItems[itemIndex].quantity - 1,
+      };
+    } else if (updatedCarItems[itemIndex].quantity === 1) {
+      updatedCarItems = updatedCarItems.filter((ele) => ele.id !== item.id);
+    }
   
-        dispatch(decreaseCart(item));
+    dispatch(setCartItems(updatedCarItems));
   }
+  
 
   return (
     <div className="flex justify-between items-center border-b border-gray-200 py-4">

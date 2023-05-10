@@ -4,10 +4,10 @@ const Url = process.env.REACT_APP_URL;
 
 export const fetch_products = createAsyncThunk(
   `fetch_products`,
-  async ({ token, page, limit }, { rejectWithValue }) => {
+  async ({ token, page, limit,searchTerm }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${Url}/products?page=${page}&&limit=${limit}`,
+        `${Url}/products?page=${page}&&limit=${limit}&&search=${searchTerm}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

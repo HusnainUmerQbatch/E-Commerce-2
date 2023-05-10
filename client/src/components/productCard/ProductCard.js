@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
-import { add } from "../../redux/slices/cartSlice";
+// import "react-toastify/dist/ReactToastify.css";
+import { setCartItems } from "../../redux/slices/cartSlice";
 
-const ProductCard = ({ id, name, description, price }) => {
+const ProductCard = ({
+  id,
+  name,
+  description,
+  price,
+  addToCartToggle,
+  setAddToCartToggle,
+}) => {
   const dispatch = useDispatch();
+  const { cartItems } = useSelector((state) => state.cart);
+
   const [quantity, setQuantity] = useState(1);
+  let updatedCarItems = [];
   const addToCart = () => {
     let cartItem = {
       id,
@@ -14,10 +24,23 @@ const ProductCard = ({ id, name, description, price }) => {
       quantity,
       price,
     };
+    console.log({ cartItems});
+    updatedCarItems = [...cartItems];
 
-    dispatch(add(cartItem));
-    toast.success("added to cart");
-    setQuantity(1)
+    const existingIndex = updatedCarItems.findIndex((item) => item.id === id);
+    if (existingIndex >= 0) {
+      updatedCarItems[existingIndex] = {
+        ...updatedCarItems[existingIndex],
+        quantity: updatedCarItems[existingIndex].quantity + quantity,
+      };
+    } else {
+      let newProduct = cartItem;
+      updatedCarItems.push(newProduct);
+    }
+    console.log({ updatedCarItems });
+    dispatch(setCartItems(updatedCarItems));
+    setAddToCartToggle(!addToCartToggle);
+    setQuantity(1);
   };
   const increament = () => {
     setQuantity(quantity + 1);
@@ -27,6 +50,7 @@ const ProductCard = ({ id, name, description, price }) => {
       setQuantity(quantity - 1);
     }
   };
+
   return (
     <>
       <div class="w-80 bg-white shadow rounded">
@@ -108,7 +132,6 @@ const ProductCard = ({ id, name, description, price }) => {
           </button>
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 };

@@ -8,28 +8,40 @@ import Loader from "../../components/loader/loader";
 import { fetch_products } from "../../redux/slices/productSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
 
 const Products = () => {
   const dispatch = useDispatch();
   const { products, success, pages, error, rows, loading } = useSelector(
     (state) => state.product
   );
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { token } = useSelector((state) => state.login);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [showLimit, seShowLimit] = useState(false);
-  const values = [10, 25, 50, 100, 1000];
+  const options = [
+    { value: 10, label: 10 },
+    { value: 25, label: 25 },
+    { value: 100, label: 100 },
+    { value: 1000, label: 1000 },
+  ];
   const handlePageClick = (data) => {
     setPage(data.selected);
+  };
+  const handleChange = (selectedOption) => {
+    setLimit(selectedOption.value)
+    setPage(0)
   };
   useEffect(() => {
     if (error) {
       toast(error);
     }
     if (token) {
-      dispatch(fetch_products({ token, page, limit }));
+      dispatch(fetch_products({ token, page, limit, searchTerm }));
     }
-  }, [page, success, error, limit]);
+  }, [page, success, error, limit, searchTerm]);
 
   return (
     <div>
@@ -39,35 +51,27 @@ const Products = () => {
         </h1>
         {!loading ? (
           <>
-            <div className="ml-10 mt-10 border">
-              <ProductTable data={products ?? []} setPage={setPage} />
+            <div className="ml-10 mt-10 mr-10 border">
+              <ProductTable
+                data={products ?? []}
+                setPage={setPage}
+                setSearchTerm={setSearchTerm}
+                searchTerm={searchTerm}
+              />
             </div>
             <div className="flex justify-between">
               <p className="text-base text-gray-500 ml-11 ">
                 total records: {rows}
               </p>
 
-              <div
-                className="mr-11 shadow-md p-3 cursor-pointer rounded-md mt-1 relative"
-                onClick={() => {
-                  seShowLimit(!showLimit);
-                  setPage(0);
-                }}
-              >
-                <p>Limit</p>
-
-                {showLimit && (
-                  <div className="absolute shadow-md p-3 cursor-pointer rounded-md bg-slate-200">
-                    {values.map((item, index) => {
-                      return (
-                        <div key={index} onClick={() => setLimit(item)}>
-                          <p>{item}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+              <Select
+               placeholder={limit}
+               className="mr-10 mt-1"
+                defaultValue={limit}
+                onChange={handleChange}
+                options={options}
+                isSearchable={false}
+              />
             </div>
             <Pagination
               handlePageClick={handlePageClick}

@@ -1,19 +1,30 @@
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 const PrivateRoute = () => {
+  const notAdminRoutes = ["/shop", "/cart"];
   const navigate = useNavigate();
+  const location = useLocation();
   const { token, user } = useSelector((state) => state.login);
   useEffect(() => {
     if (!token || token === "") {
       navigate("/");
       return;
     } else if (token) {
-      if (user.role === "seller") {
-        navigate("/products");
-      } else {
+      if (
+        user.role === "seller" &&
+        notAdminRoutes.includes(location.pathname)
+      ) {
+         navigate("/products");
+      } else if (
+        user.role === "customer" &&
+        !notAdminRoutes.includes(location.pathname)
+      ) {
+        console.log("customer");
         navigate("/shop");
+      } else {
+         navigate(location.pathname);
       }
     }
   }, [token]);

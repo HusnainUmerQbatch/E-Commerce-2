@@ -2,7 +2,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import { useState, useEffect } from "react";
-import Loader from "../../../components/loader/loader";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -34,8 +33,17 @@ function UpdateProduct() {
       update_product({ name, price, description, asin, token, id })
     ).then((res) => {
       toast(res?.payload?.message);
+      setTimeout(() => {
+        navigate("/products");
+      }, 2000);
     });
   };
+
+  useEffect(() => {
+    if (error) {
+      toast(error);
+    }
+  }, [error]);
   return (
     <div className="w-full">
       <SideBar>
@@ -126,7 +134,7 @@ function UpdateProduct() {
                   disabled={isSubmitting}
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
                 >
-                  update
+                  {`${loading ? "" : "update"}`}
                 </button>
               </Form>
             )}

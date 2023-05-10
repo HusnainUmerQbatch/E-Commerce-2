@@ -6,20 +6,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { create_product } from "../../../redux/slices/productSlice";
 import SideBar from "../../../components/sideBar";
+import { useEffect } from "react";
 function CreateProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error } = useSelector((state) => state.product);
+  const { error, loading } = useSelector((state) => state.product);
   const token = useSelector((state) => state.login.token);
   const onSubmit = (values) => {
     const { name, price, description, asin } = values;
     dispatch(create_product({ name, price, description, asin, token })).then(
       (res) => {
         toast(res.payload.message);
+        
+        setTimeout(() => {
+          navigate("/products")
+        }, 2000);
       }
     );
   };
+  useEffect(() => {
+    if (error) {
+      toast(error);
+    }
+  }, [error]);
+
   return (
     <div className="w-full">
       <SideBar>
@@ -110,7 +121,7 @@ function CreateProduct() {
                   disabled={isSubmitting}
                   className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
                 >
-                  create Product
+                  {`${loading ? "" : "create"}`}
                 </button>
               </Form>
             )}
