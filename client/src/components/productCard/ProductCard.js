@@ -37,7 +37,6 @@ const ProductCard = ({
       let newProduct = cartItem;
       updatedCarItems.push(newProduct);
     }
-    console.log({ updatedCarItems });
     dispatch(setCartItems(updatedCarItems));
     setAddToCartToggle(!addToCartToggle);
     setQuantity(1);
