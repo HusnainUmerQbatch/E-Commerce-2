@@ -12,8 +12,12 @@ export const cartSlice = createSlice({
     setTotals(state, action) {
       state.cartTotalAmount = action.payload;
     },
+    clearCart(state) {
+      state.cartItems= [];
+      state.cartTotalAmount= 0;
+    },
   },
 });
 // Action creators are generated for each case reducer function
-export const { setCartItems, setTotals } = cartSlice.actions;
-export default cartSlice.reducer; 
+export const { setCartItems, setTotals,clearCart } = cartSlice.actions;
+export default cartSlice.reducer;

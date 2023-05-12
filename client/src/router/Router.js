@@ -8,6 +8,7 @@ import CreateProduct from "../pages/products/createProduct/CreateProduct";
 import UpdateProduct from "../pages/products/updateProduct";
 import Cart from "../pages/cart/Cart";
 import NotFound from "../pages/notFound/NotFound";
+import Checkout from "../pages/checkout";
 function Router() {
   return (
     <BrowserRouter>
@@ -16,6 +17,7 @@ function Router() {
       <Route element={<PrivateRoute />}>
       <Route exact path="/shop" element={<Shop />} />
         <Route exact path="/products" element={<Products />} />
+        <Route exact path="/checkout" element={<Checkout />} />
         <Route exact path="/products/new" element={<CreateProduct />} />
         <Route exact path="/products/:id" element={<UpdateProduct />} />
         <Route exact path="/cart" element={<Cart />} />

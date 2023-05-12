@@ -18,9 +18,11 @@ app.use(cors());
 //routes
 
 app.use("/", auth);
-app.use("/", 
-passport.authenticate("jwt", { session: false }),
- product);
+app.use(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  product
+);
 
 //server
 const Port = process.env.PORT || 5000;

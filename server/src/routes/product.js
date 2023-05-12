@@ -8,11 +8,13 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../controllers/products");
+const { checkRole } = require("../middleware/passport");
 
 router.post("/products", async (req, res) => {
   try {
+    const {user}=req;
     const { name, description, price, asin } = req.body;
-    const result = await addProduct({ name, description, price, asin });
+    const result = await addProduct({ name, description, price, asin,user });
     res.json(result);
   } catch (error) {
     const { status } = error;
@@ -24,10 +26,12 @@ router.post("/products", async (req, res) => {
 });
 router.get("/products", async (req, res) => {
   try {
+    const { user } = req;
     const { limit, page } = req.query;
-    const result = await getAllproducts({limit, page});
+    const result = await getAllproducts({ limit, page,user});
     res.json(result);
   } catch (error) {
+    console.log(error);
     const { status } = error;
     s = status ? status : 500;
     return res.status(s).send({
@@ -35,7 +39,7 @@ router.get("/products", async (req, res) => {
     });
   }
 });
-router.get("/products/:id", async (req, res) => {
+router.get("/products/:id", checkRole, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await getProductById({ id });
@@ -47,7 +51,7 @@ router.get("/products/:id", async (req, res) => {
     });
   }
 });
-router.put("/products/:id", async (req, res) => {
+router.put("/products/:id", checkRole, async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description, price, asin } = req.body;
@@ -60,7 +64,7 @@ router.put("/products/:id", async (req, res) => {
     });
     res.json(result);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     const { status } = error;
     s = status ? status : 500;
     return res.status(s).send({
@@ -68,7 +72,7 @@ router.put("/products/:id", async (req, res) => {
     });
   }
 });
-router.delete("/products/:id", async (req, res) => {
+router.delete("/products/:id", checkRole, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await deleteProduct({ id });

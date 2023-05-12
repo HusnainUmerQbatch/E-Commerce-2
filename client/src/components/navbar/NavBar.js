@@ -30,7 +30,7 @@ function Navbar() {
               />
             </svg>
             <span className="absolute -top-1 -right-[1.75rem] bg-red-500 mt-1 text-white rounded-full px-1">
-              {cartItems.length}
+              {cartItems?.length}
             </span>
           </Link>
         </div>

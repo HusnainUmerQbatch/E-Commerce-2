@@ -29,28 +29,24 @@ passport.use(
   )
 );
 
-// checkRole = async (req, res, next) => {
-//   try {
-//     const isEmp = await Employee.findOne({ _id: req.user.id });
-//     const isAdmin = await Admin.findOne({ _id: req.user.id });
-//     if (isAdmin) {
-//       next();
-//     }
-//     if (isEmp) {
-//       if (isEmp.job_role == "owner") {
-//         next();
-//       } else {
-//         res
-//           .status(401)
-//           .send({ message: "you are not authorized to perform this task" });
-//       }
-//     }
-//   } catch (error) {
-//     res.status(500).send({ ...error });
-//   }
-// };
+checkRole = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.user.id });
+
+      if (user.role == "seller") {
+        next();
+      } else {
+        res
+          .status(401)
+          .send({ message: "you are not authorized to perform this task" });
+      }
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ ...error });
+  }
+};
 
 module.exports = {
   passport,
-  // checkRole,
+  checkRole,
 };

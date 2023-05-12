@@ -19,6 +19,7 @@ const productSchema = mongoose.Schema(
       required: true,
       unique:true
     },
+    user: { type: mongoose.Types.ObjectId, ref: 'user' }, 
   },
   {
     timestamps: true,
