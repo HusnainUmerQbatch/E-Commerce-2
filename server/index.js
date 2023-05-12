@@ -6,7 +6,7 @@ const connectDB = require("./config/db");
 //importing authentiocation middleware
 const { passport } = require("../server/src/middleware/passport");
 
-const { auth, product } = require("./src/routes");
+const { auth, product,order } = require("./src/routes");
 
 //Db_connection
 connectDB();
@@ -22,6 +22,11 @@ app.use(
   "/",
   passport.authenticate("jwt", { session: false }),
   product
+);
+app.use(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  order
 );
 
 //server

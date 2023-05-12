@@ -18,9 +18,9 @@ function UpdateProduct() {
   );
   const token = useSelector((state) => state.login.token);
   useEffect(() => {
-    if (error) {
-      toast.error(error.message);
-    }
+    // if (error) {
+    //   toast.error(error.message);
+    // }
     if (id) {
       const singleUser = products.filter((ele) => ele._id === id);
       setProduct(singleUser[0]);
@@ -29,14 +29,14 @@ function UpdateProduct() {
 
   const onSubmit = (values) => {
     const { name, price, description, asin } = values;
-    dispatch(
-      update_product({ name, price, description, asin, token, id })
-    ).then((res) => {
-      toast(res?.payload?.message);
-      setTimeout(() => {
-        navigate("/products");
-      }, 2000);
-    });
+    dispatch(update_product({ name, price, description, asin, token, id }));
+    toast("updated successfully");
+    // .then((res) => {
+    //   toast(res?.payload?.message);
+    //   setTimeout(() => {
+    //     navigate("/products");
+    //   }, 2000);
+    // });
   };
 
   useEffect(() => {

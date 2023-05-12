@@ -7,7 +7,10 @@ const login = async ({ email, password }) => {
   const UserExist = await User.findOne({ email });
   //match password
   if (!UserExist) {
-    return { message: "Invalid Email or Password" };
+    throw{
+      message: "Invalid Email or Password",
+      status:400
+    };
   }
   const isPasswordMatch = await matchPaswsord(password, UserExist.password);
   if (isPasswordMatch) {
@@ -18,7 +21,10 @@ const login = async ({ email, password }) => {
       user: UserExist,
     };
   } else {
-    return { message: "Invalid Email or Password" };
+    throw{
+      message: "Invalid Email or Password",
+      status:400
+    };
   }
 };
 

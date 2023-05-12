@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 const PrivateRoute = () => {
-  const notAdminRoutes = ["/shop", "/cart",'/checkout'];
+  const notAdminRoutes = ["/shop", "/cart",'/checkout ' ,'thankyou'];
   const navigate = useNavigate();
   const location = useLocation();
   const { token, user } = useSelector((state) => state.login);

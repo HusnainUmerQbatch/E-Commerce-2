@@ -76,6 +76,7 @@ const Shop = () => {
                 id={item._id}
                 description={item.description}
                 price={item.price}
+                user={item?.user}
                 addToCartToggle={addToCartToggle}
                 setAddToCartToggle={setAddToCartToggle}
               />

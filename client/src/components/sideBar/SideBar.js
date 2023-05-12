@@ -2,6 +2,7 @@ import React, { Children } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { SignOut } from "../../redux/slices/loginSlice";
+import { FaUserCircle } from "react-icons/fa";
 export default function Sidebar({ children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();

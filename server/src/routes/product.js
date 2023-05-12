@@ -12,9 +12,9 @@ const { checkRole } = require("../middleware/passport");
 
 router.post("/products", async (req, res) => {
   try {
-    const {user}=req;
+    const { user } = req;
     const { name, description, price, asin } = req.body;
-    const result = await addProduct({ name, description, price, asin,user });
+    const result = await addProduct({ name, description, price, asin, user });
     res.json(result);
   } catch (error) {
     const { status } = error;
@@ -28,7 +28,7 @@ router.get("/products", async (req, res) => {
   try {
     const { user } = req;
     const { limit, page } = req.query;
-    const result = await getAllproducts({ limit, page,user});
+    const result = await getAllproducts({ limit, page, user });
     res.json(result);
   } catch (error) {
     console.log(error);

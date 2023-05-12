@@ -8,6 +8,7 @@ const ProductCard = ({
   name,
   description,
   price,
+  user,
   addToCartToggle,
   setAddToCartToggle,
 }) => {
@@ -65,6 +66,7 @@ const ProductCard = ({
             Hammond robotics
           </p>
           <h1 class="text-gray-800 text-center mt-1">{name}</h1>
+          <h1 class=" text-center text-red-600 mt-1"> <span className="text-base text-gray-800">By </span>{user?.firstName}</h1>
           <p class="text-center text-gray-800 mt-1">${price}</p>
           <div class="inline-flex items-center mt-2">
             <button

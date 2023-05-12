@@ -8,7 +8,7 @@ const getAllproducts = async ({ limit, page, user }) => {
     filters["user"]=user.id;
   }
   const total = await Product.countDocuments(filters);
-  const products = await Product.find(filters).skip(pageNumber).limit(items);
+  const products = await Product.find(filters).populate("user").skip(pageNumber).limit(items);
   return {
     products,
     totalPages: Math.ceil(total / items),

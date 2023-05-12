@@ -35,9 +35,9 @@ const Products = () => {
     setPage(0)
   };
   useEffect(() => {
-    if (error) {
-      toast(error);
-    }
+    // if (error) {
+    //   toast(error);
+    // }
     if (token) {
       dispatch(fetch_products({ token, page, limit, searchTerm }));
     }

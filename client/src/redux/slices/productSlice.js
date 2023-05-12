@@ -155,6 +155,7 @@ export const productSlice = createSlice({
 
     [update_product.rejected]: (state, { payload }) => ({
       loading: false,
+      error:payload,
       success: true,
     }),
 
