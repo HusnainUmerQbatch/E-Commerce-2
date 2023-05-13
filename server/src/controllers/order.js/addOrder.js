@@ -1,4 +1,5 @@
 const Order = require("../../models/order");
+const transporter = require("../../utlis/nodemailer");
 const addOrder = async ({
   firstName,
   lastName,
@@ -32,9 +33,26 @@ const addOrder = async ({
     products: orderdaProducts,
   });
 
+  const mailOptions = {
+    from: "husnain.umer600@gmail.com",
+    to: email,
+    subject: "order success",
+    text: "your order ha been placed",
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      throw {
+        error
+      }
+    } else {
+     
+    }
+  });
   return {
     message: "order created successfully",
     order,
   };
+
 };
 module.exports = addOrder;
