@@ -1,4 +1,5 @@
 const Order = require("../../models/order");
+const OrderProducts = require("../../models/orderdProducts");
 const transporter = require("../../utlis/nodemailer");
 const addOrder = async ({
   firstName,
@@ -14,10 +15,19 @@ const addOrder = async ({
   notes,
   user,
 }) => {
-  let orderdaProducts = [];
-  products?.map((item) => {
-    orderdaProducts.push(item.id);
-  });
+  let Products = [];
+
+  for (let i = 0; i < products?.length; i++) {
+    const { name, description, quantity } = products[i];
+    const orderedProduct = await OrderProducts.create({
+      name,
+      description,
+      quantity,
+    });
+    console.log(orderedProduct.id);
+    Products.push(orderedProduct.id);
+  }
+  console.log({ Products });
   const order = await Order.create({
     firstName,
     lastName,
@@ -30,7 +40,7 @@ const addOrder = async ({
     paymentMethod,
     notes,
     customer: user.id,
-    products: orderdaProducts,
+    products: Products,
   });
 
   const mailOptions = {
@@ -43,16 +53,14 @@ const addOrder = async ({
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       throw {
-        error
-      }
+        error,
+      };
     } else {
-     
     }
   });
   return {
     message: "order created successfully",
     order,
   };
-
 };
 module.exports = addOrder;

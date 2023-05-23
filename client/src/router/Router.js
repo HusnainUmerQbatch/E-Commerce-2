@@ -10,19 +10,20 @@ import Cart from "../pages/cart/Cart";
 import NotFound from "../pages/notFound/NotFound";
 import Checkout from "../pages/checkout";
 import ThankYou from "../pages/thankYou/ThankYou";
+import MyOrders from "../pages/myOrders/MyOrders";
 function Router() {
   return (
     <BrowserRouter>
       <Routes>
-      
-      <Route element={<PrivateRoute />}>
-      <Route exact path="/shop" element={<Shop />} />
-        <Route exact path="/products" element={<Products />} />
-        <Route exact path="/checkout" element={<Checkout />} />
-        <Route exact path="/products/new" element={<CreateProduct />} />
-        <Route exact path="/products/:id" element={<UpdateProduct />} />
-        <Route exact path="/cart" element={<Cart />} />
-        <Route exact path="/thankyou" element={<ThankYou />} />
+        <Route element={<PrivateRoute />}>
+          <Route exact path="/shop" element={<Shop />} />
+          <Route exact path="/products" element={<Products />} />
+          <Route exact path="/checkout" element={<Checkout />} />
+          <Route exact path="/products/new" element={<CreateProduct />} />
+          <Route exact path="/products/:id" element={<UpdateProduct />} />
+          <Route exact path="/cart" element={<Cart />} />
+          <Route exact path="/thankyou" element={<ThankYou />} />
+          <Route exact path="/myorders" element={<MyOrders />} />
         </Route>
         <Route exact path="/" element={<Login />} />
         <Route exact path="/signup" element={<SignUp />} />

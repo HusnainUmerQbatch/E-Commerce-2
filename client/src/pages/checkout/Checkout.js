@@ -6,8 +6,10 @@ import { clearCart, setTotals } from "../../redux/slices/cartSlice";
 import Navbar from "../../components/navbar";
 import { createOrder } from "../../redux/slices/orderSlice";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../components/loader/loader";
 const Checkout = () => {
   const { cartItems, cartTotalAmount } = useSelector((state) => state.cart);
+  const { loading } = useSelector((state) => state.order);
   const { token } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -273,10 +275,18 @@ const Checkout = () => {
                     </div>
                     <div class="mt-4">
                       <button
-                        class="w-full px-6 py-2 text-blue-200 bg-blue-600 hover:bg-blue-900"
+                        class="w-full px-6 py-2 flex justify-center items center text-blue-200 bg-blue-600 hover:bg-blue-900"
                         type="submit"
                       >
-                        Process
+                        {loading ? (
+                          <Loader
+                            color={"#4fa94d"}
+                            width={"20"}
+                            height={"20"}
+                          />
+                        ) : (
+                          "Process"
+                        )}
                       </button>
                     </div>
                   </div>

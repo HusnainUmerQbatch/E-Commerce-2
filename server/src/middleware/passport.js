@@ -7,7 +7,7 @@ var headerExtractor = function (req) {
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
-    token = req.headers.authorization.split(" ")[1];
+    let token = req.headers.authorization.split(" ")[1];
     return token;
   }
 };
@@ -29,19 +29,19 @@ passport.use(
   )
 );
 
-checkRole = async (req, res, next) => {
+const checkRole = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.user.id });
 
-      if (user.role == "seller") {
-        next();
-      } else {
-        res
-          .status(401)
-          .send({ message: "you are not authorized to perform this task" });
-      }
+    if (user.role == "seller") {
+      next();
+    } else {
+      res
+        .status(401)
+        .send({ message: "you are not authorized to perform this task" });
+    }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({ ...error });
   }
 };

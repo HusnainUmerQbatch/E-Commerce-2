@@ -1,26 +1,22 @@
 import React from "react";
-import SideBar from "../../components/sideBar";
 import { useState, useEffect } from "react";
+import CustomerPanel from "../../components/customerPanel/CustomerPanel";
+import Navbar from "../../components/navbar";
 import { useDispatch, useSelector } from "react-redux";
-import ProductTable from "../../components/productTable/ProductTable";
-import Pagination from "../../components/pagination";
+import OrderTable from "../../components/orderTable/OrderTable";
 import Loader from "../../components/loader/loader";
-import { fetch_products } from "../../redux/slices/productSlice";
+import Pagination from "../../components/pagination";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
-
-const Products = () => {
+import "react-toastify/dist/ReactToastify.css";
+function MyOrders() {
   const dispatch = useDispatch();
   const { products, success, pages, error, rows, loading } = useSelector(
     (state) => state.product
   );
   const [searchTerm, setSearchTerm] = useState("");
-
-  const { token } = useSelector((state) => state.login);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [showLimit, seShowLimit] = useState(false);
   const options = [
     { value: 10, label: 10 },
     { value: 25, label: 25 },
@@ -34,25 +30,17 @@ const Products = () => {
     setLimit(selectedOption.value);
     setPage(0);
   };
-  useEffect(() => {
-    // if (error) {
-    //   toast(error);
-    // }
-    if (token) {
-      dispatch(fetch_products({ token, page, limit, searchTerm }));
-    }
-  }, [page, success, error, limit, searchTerm]);
-
   return (
     <div>
-      <SideBar>
+      <Navbar />
+      <CustomerPanel>
         <h1 className="text-2xl font-serif font-semibold text-center mt-5">
-          Products
+          Orders
         </h1>
         {!loading ? (
           <>
             <div className="ml-10 mt-10 mr-10 border">
-              <ProductTable
+              <OrderTable
                 data={products ?? []}
                 setPage={setPage}
                 setSearchTerm={setSearchTerm}
@@ -68,7 +56,7 @@ const Products = () => {
                 placeholder={limit}
                 className="mr-10 mt-1"
                 defaultValue={limit}
-                onChange={handleChange}
+                // onChange={handleChange}
                 options={options}
                 isSearchable={false}
               />
@@ -84,10 +72,9 @@ const Products = () => {
             <Loader color={"black"} width={"70"} height={"70"} />
           </div>
         )}
-      </SideBar>
-      <ToastContainer />
+      </CustomerPanel>
     </div>
   );
-};
+}
 
-export default Products;
+export default MyOrders;

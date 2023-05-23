@@ -43,3 +43,8 @@ code {
   color: #dd506a;
   text-decoration: underline #dd506a;
 }
+.popup-content{
+  width: 14% !important;
+  top: 52.5px !important;
+  right: -45px !important;
+}
