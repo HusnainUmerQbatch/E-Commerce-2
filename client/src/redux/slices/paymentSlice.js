@@ -37,19 +37,25 @@ export const CreateSubscription = createAsyncThunk(
     try {
       const {
         token,
-        coupon,
         selectedPlan,
+        source,
         planId,
         userData
       } = data;
-      const response = await axios.post('/stripe/create-user-subscription', {
-        token,
-        coupon,
-        planId,
-        selectedPlan,
-        userData
-      });
-
+        const response = await axios.post(
+          `${Url}/create-user-subscription`,
+          {
+            planId,
+            source,
+            selectedPlan,
+            userData
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       return response.data;
     } catch (err) {
       if (err.response && err.response.data) {
@@ -103,22 +109,22 @@ const auth = createSlice({
       loading: false,
       err: action.payload.err,
     }),
-    // [CreateSubscription.pending]: (state, action) => ({
-    //   ...state,
-    //   loading: true
-    // }),
-    // [CreateSubscription.fulfilled]: (state, action) => ({
-    //   ...state,
-    //   loading: false,
-    //   success: true,
-    //   message: 'Subscription Has Been Created Succesfully'
-    // }),
-    // [CreateSubscription.rejected]: (state, action) => ({
-    //   ...state,
-    //   success: false,
-    //   loading: false,
-    //   err: action.payload.err
-    // }),
+    [CreateSubscription.pending]: (state, action) => ({
+      ...state,
+      loading: true
+    }),
+    [CreateSubscription.fulfilled]: (state, action) => ({
+      ...state,
+      loading: false,
+      success: true,
+      message: 'Subscription Has Been Created Succesfully'
+    }),
+    [CreateSubscription.rejected]: (state, action) => ({
+      ...state,
+      success: false,
+      loading: false,
+      err: action.payload.err
+    }),
     // [CancelSubscription.pending]: (state, action) => ({
     //   ...state,
     //   loading: true

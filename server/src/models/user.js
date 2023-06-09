@@ -14,6 +14,8 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    selectedPlan: { type: Object },
+
     image: {
       type: String,
       required: false,
@@ -22,6 +24,17 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    
+    stripeUserId: {
+      type: String,
+      required: false,
+    },
+    subscriptionId: {
+      type: String,
+      required: false,
+    },
+
+    status: { type: String, Enum: ['Pending', 'Verified', 'Subscribed', 'Active'], default: 'Pending' },
     role: {
       type: String,
       enum: ["customer", "seller"],

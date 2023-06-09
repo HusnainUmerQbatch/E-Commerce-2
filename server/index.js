@@ -18,7 +18,7 @@ app.use(cors());
 //routes
 
 app.use("/", auth);
-app.use("/", stripe);
+app.use("/", passport.authenticate("jwt", { session: false }), stripe);
 app.use(
   "/",
   passport.authenticate("jwt", { session: false }),
