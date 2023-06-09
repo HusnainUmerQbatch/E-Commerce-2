@@ -11,6 +11,8 @@ import NotFound from "../pages/notFound/NotFound";
 import Checkout from "../pages/checkout";
 import ThankYou from "../pages/thankYou/ThankYou";
 import MyOrders from "../pages/myOrders/MyOrders";
+import SubscriptionPlans from "../pages/subscriptionPlans";
+import PaymentForm from "../pages/add-subscription/PaymentForm";
 function Router() {
   return (
     <BrowserRouter>
@@ -24,6 +26,9 @@ function Router() {
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/thankyou" element={<ThankYou />} />
           <Route exact path="/myorders" element={<MyOrders />} />
+          <Route exact path="/subscription-plans" element={<SubscriptionPlans />} />
+          <Route exact path="/add-subscription" element={<PaymentForm />} />
+
         </Route>
         <Route exact path="/" element={<Login />} />
         <Route exact path="/signup" element={<SignUp />} />

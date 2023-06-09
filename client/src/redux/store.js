@@ -1,5 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import loginReducer from "../redux/slices/loginSlice";
+import paymentReducer from "../redux/slices/paymentSlice";
+
 import productReducer from "./slices/productSlice";
 import orderReducer from "./slices/orderSlice";
 import cartReducer from "./slices/cartSlice";
@@ -20,6 +22,7 @@ const reducers = combineReducers({
   product: productReducer,
   cart: cartReducer,
   order: orderReducer,
+  payment: paymentReducer,
 });
 
 const reducer = (state, action) => {
